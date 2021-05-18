@@ -1,16 +1,33 @@
 from django.urls import path
-from .views import get_clienti, register_client, login, get_puncte_lucru,\
-        inregistrare_rezervare, validare_rezervare, get_judete, get_localitati
+from progres_1.views import client, judet, localitate, domeniu, punct_lucru
 
 urlpatterns = [
-    path('get_clienti/', get_clienti),
-    path('get_puncte_lucru/<str:client_token>/', get_puncte_lucru),
-    path('register_client/', register_client),
-    path('get_judete/', get_judete),
-    path('get_localitati/', get_localitati),
-    path('inregistrare_rezervare/<str:client_token>/', inregistrare_rezervare),
-    path('validare_rezervare', validare_rezervare),
-    path('login/', login),
+
+    #CLIENT
+    path('client/register_client/', client.register_client),
+    path('client/login/', client.login),
+    path('client/validare_cont_client/<str:token>/', client.validare_cont_client),
+    path('client/generare_cod_inregistrare/<str:token>/', client.generare_cod_inregistrare),
+    path('client/inregistrare_rezervare/<str:token>/', client.inregistrare_rezervare),
+    path('client/validare_rezervare/<str:token>', client.validare_rezervare),
+    path('client/get_client_from_email/<str:token>/', client.get_client_from_email),
+
+    #NOMENCLATOARE
+    path('nomenclatoare/get_judete/', judet.get_judete),
+    path('nomenclatoare/get_localitati/', localitate.get_localitati),
+    path('nomenclatoare/get_domenii/<str:token>/', domeniu.get_domenii),
+
+    #TERT
+    path('terti/get_puncte_lucru/<str:token>/', punct_lucru.get_puncte_lucru),
+
+
+
+
+
+
+
+
+
     # path('validate_registration/<user_id>', validate_user_registration),
     # path('generate_user_registration_token/<user_id>', generate_user_registration_token),
 ]

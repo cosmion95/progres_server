@@ -24,7 +24,7 @@ class Localitate(models.Model):
         parameters = []
         for param in data:
             parameters.append(data[param])
-        return_val = handled_cursor.clobFunction(parameters[0])
+        return_val = handled_cursor.clobFunction("nomenclatoare.get_localitati", parameters)
         return return_val
 
 

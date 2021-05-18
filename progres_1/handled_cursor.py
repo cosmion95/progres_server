@@ -19,10 +19,18 @@ class HandledCursor:
         function_return_value = self.cursor.callfunc(func_name, return_type, parameters)
         return function_return_value
 
-    def clobFunction(self, judet):
+    def clobFunction(self, func_name, parameters):
+        select = "select " + func_name + "("
+        paramValues = {}
+        for i in range(len(parameters)):
+            select = select + ":" + str(i) + ", "
+            paramValues[str(i)] = parameters[i]
+        select = select[0: (len(select)-2)] + ") from dual"
+        print(select)
+        print(paramValues)
         connection.outputtypehandler = OutputTypeHandler
         cursor = connection.cursor()
-        cursor.execute("select nomenclatoare.get_localitati(:judet) from dual", {'judet': judet})
+        cursor.execute(select, paramValues)
         clob = cursor.fetchone()
         return str(clob[0])
 

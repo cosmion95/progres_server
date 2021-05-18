@@ -29,6 +29,15 @@ class PunctLucru(models.Model):
             parameters.append(data[param])
         handled_cursor.callproc("tert_management.add_punct_lucru", parameters)
 
+    @staticmethod
+    def get_puncte_lucru(data):
+        handled_cursor = HandledCursor()
+        parameters = []
+        for param in data:
+            parameters.append(data[param])
+        return_val = handled_cursor.clobFunction("tert_management.get_puncte_lucru", parameters)
+        return return_val
+
 class PunctLucruSerializer(serializers.ModelSerializer):
     class Meta:
         model = PunctLucru

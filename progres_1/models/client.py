@@ -38,6 +38,11 @@ class Client(models.Model):
         recipients = [data["email"]]
         send_mail(subject, body, sender, recipients, fail_silently=False)
 
+        client_id = handled_cursor.callfunc("client_management.get_client_id", str, [data["email"]])
+        handled_cursor.callproc("client_management.create_client_token", [client_id])
+        auth_token = handled_cursor.callfunc("client_management.get_client_token", str, [client_id])
+        return {"id": client_id, "auth_token": auth_token}
+
     @staticmethod
     def add_recenzie(data):
         handled_cursor = HandledCursor()
@@ -55,6 +60,15 @@ class Client(models.Model):
         for param in data:
             parameters.append(data[param])
         handled_cursor.callproc("client_management.generare_cod_inregistrare", parameters)
+
+        register_token = handled_cursor.callfunc("client_management.get_cod_inregistrare", str, [data["email"]])
+        client = Client.objects.get(email=data["email"])
+
+        subject = "Activare cont PROGRES"
+        body = "Buna, " + client.prenume + ".\nLa cererea ta am generat un nou cod pentru activarea contului: " + register_token + "\nAi grija, expira in 3 ore.\n\nGanduri bune,\nEchipa Progres"
+        sender = "progres@progres_app.com"
+        recipients = [data["email"]]
+        send_mail(subject, body, sender, recipients, fail_silently=False)
 
     @staticmethod
     def validare_cont_client(data):
@@ -82,8 +96,12 @@ class Client(models.Model):
 
         for param in data:
             parameters.append(data[param])
-        client_email = handled_cursor.callfunc("client_management.login", str, parameters)
-        return client_email
+        client_id = handled_cursor.callfunc("client_management.login", int, parameters)
+
+        parameters = [client_id]
+        handled_cursor.callproc("client_management.create_client_token", parameters)
+        client_token = handled_cursor.callfunc("client_management.get_client_token", str, parameters)
+        return client_token
 
     @staticmethod
     def create_client_token(data):
@@ -107,10 +125,18 @@ class Client(models.Model):
     @staticmethod
     def check_token(token):
         handled_cursor = HandledCursor()
-        parameters = []
-        parameters.append(token)
+        parameters = [token]
         result = handled_cursor.callfunc("client_management.check_token", str, parameters)
         return result
+
+    @staticmethod
+    def get_client_from_email(data):
+        handled_cursor = HandledCursor()
+        parameters = []
+        for param in data:
+            parameters.append(data[param])
+        return_val = handled_cursor.callfunc("client_management.get_client_from_email", str, parameters)
+        return return_val
 
 
 class ClientSerializer(serializers.ModelSerializer):

@@ -19,6 +19,9 @@ urlpatterns = [
 
     #TERT
     path('terti/get_puncte_lucru/<str:token>/', punct_lucru.get_puncte_lucru),
+    path('terti/get_program_punct/<str:token>/', punct_lucru.get_program_punct),
+    path('terti/get_urmatoarea_zi_lucratoare/<str:token>/', punct_lucru.get_urmatoarea_zi_lucratoare),
+    path('terti/get_procent_ocupare/<str:token>/', punct_lucru.get_procent_ocupare),
 
 
 

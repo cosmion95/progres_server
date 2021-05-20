@@ -26,8 +26,6 @@ class HandledCursor:
             select = select + ":" + str(i) + ", "
             paramValues[str(i)] = parameters[i]
         select = select[0: (len(select)-2)] + ") from dual"
-        print(select)
-        print(paramValues)
         connection.outputtypehandler = OutputTypeHandler
         cursor = connection.cursor()
         cursor.execute(select, paramValues)

@@ -38,6 +38,33 @@ class PunctLucru(models.Model):
         return_val = handled_cursor.clobFunction("tert_management.get_puncte_lucru", parameters)
         return return_val
 
+    @staticmethod
+    def get_program_punct(data):
+        handled_cursor = HandledCursor()
+        parameters = []
+        for param in data:
+            parameters.append(data[param])
+        return_val = handled_cursor.clobFunction("tert_management.get_program_punct", parameters)
+        return return_val
+
+    @staticmethod
+    def get_urmatoarea_zi_lucratoare(data):
+        handled_cursor = HandledCursor()
+        parameters = []
+        for param in data:
+            parameters.append(data[param])
+        return_val = handled_cursor.clobFunction("tert_management.get_urmatoarea_zi_lucratoare", parameters)
+        return return_val
+
+    @staticmethod
+    def get_procent_ocupare(data):
+        handled_cursor = HandledCursor()
+        parameters = []
+        for param in data:
+            parameters.append(data[param])
+        return_val = handled_cursor.callfunc("tert_management.get_procent_ocupare", str, parameters)
+        return return_val
+
 class PunctLucruSerializer(serializers.ModelSerializer):
     class Meta:
         model = PunctLucru

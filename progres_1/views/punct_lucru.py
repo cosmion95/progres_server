@@ -2,7 +2,6 @@ from progres_1.models import punct_lucru, client
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-import time
 
 
 @api_view(['POST'])
@@ -12,9 +11,35 @@ def get_puncte_lucru(request, token):
                         status=status.HTTP_400_BAD_REQUEST)
     if request.method == 'POST':
         puncte_lucru = punct_lucru.PunctLucru.get_puncte_lucru(request.data)
-        print("gasit puncte")
         if puncte_lucru == "]":
-            return Response(data={"error": "Nu exista puncte de lucru inregistrate la localitatea aleasa."},
+            return Response(data={"error": "Nu am gasit puncte de lucru."},
                             status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(puncte_lucru)
+
+@api_view(['POST'])
+def get_program_punct(request, token):
+    if token is None or len(token) < 32 or client.Client.check_token(token) == 'N':
+        return Response(data={"error": "Nu aveti autorizare pentru a viziona continutul"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    if request.method == 'POST':
+        program = punct_lucru.PunctLucru.get_program_punct(request.data)
+        return Response(program)
+
+@api_view(['POST'])
+def get_urmatoarea_zi_lucratoare(request, token):
+    if token is None or len(token) < 32 or client.Client.check_token(token) == 'N':
+        return Response(data={"error": "Nu aveti autorizare pentru a viziona continutul"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    if request.method == 'POST':
+        program = punct_lucru.PunctLucru.get_urmatoarea_zi_lucratoare(request.data)
+        return Response(program)
+
+@api_view(['POST'])
+def get_procent_ocupare(request, token):
+    if token is None or len(token) < 32 or client.Client.check_token(token) == 'N':
+        return Response(data={"error": "Nu aveti autorizare pentru a viziona continutul"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    if request.method == 'POST':
+        program = punct_lucru.PunctLucru.get_procent_ocupare(request.data)
+        return Response(program)

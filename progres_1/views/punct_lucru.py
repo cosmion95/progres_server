@@ -43,3 +43,30 @@ def get_procent_ocupare(request, token):
     if request.method == 'POST':
         program = punct_lucru.PunctLucru.get_procent_ocupare(request.data)
         return Response(program)
+
+@api_view(['POST'])
+def get_program_neeligibil(request, token):
+    if token is None or len(token) < 32 or client.Client.check_token(token) == 'N':
+        return Response(data={"error": "Nu aveti autorizare pentru a viziona continutul"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    if request.method == 'POST':
+        program = punct_lucru.PunctLucru.get_program_neeligibil(request.data)
+        return Response(program)
+
+@api_view(['POST'])
+def verificare_timp_ales(request, token):
+    if token is None or len(token) < 32 or client.Client.check_token(token) == 'N':
+        return Response(data={"error": "Nu aveti autorizare pentru a viziona continutul"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    if request.method == 'POST':
+        program = punct_lucru.PunctLucru.verificare_timp_ales(request.data)
+        return Response(program)
+
+@api_view(['POST'])
+def get_tipuri_rezervare(request, token):
+    if token is None or len(token) < 32 or client.Client.check_token(token) == 'N':
+        return Response(data={"error": "Nu aveti autorizare pentru a viziona continutul"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    if request.method == 'POST':
+        program = punct_lucru.PunctLucru.get_tipuri_rezervare(request.data)
+        return Response(program)

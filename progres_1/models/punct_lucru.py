@@ -57,12 +57,39 @@ class PunctLucru(models.Model):
         return return_val
 
     @staticmethod
+    def get_tipuri_rezervare(data):
+        handled_cursor = HandledCursor()
+        parameters = []
+        for param in data:
+            parameters.append(data[param])
+        return_val = handled_cursor.clobFunction("tert_management.get_tipuri_rezervare", parameters)
+        return return_val
+
+    @staticmethod
     def get_procent_ocupare(data):
         handled_cursor = HandledCursor()
         parameters = []
         for param in data:
             parameters.append(data[param])
         return_val = handled_cursor.callfunc("tert_management.get_procent_ocupare", str, parameters)
+        return return_val
+
+    @staticmethod
+    def get_program_neeligibil(data):
+        handled_cursor = HandledCursor()
+        parameters = []
+        for param in data:
+            parameters.append(data[param])
+        return_val = handled_cursor.callfunc("tert_management.get_program_neeligibil", str, parameters)
+        return return_val
+
+    @staticmethod
+    def verificare_timp_ales(data):
+        handled_cursor = HandledCursor()
+        parameters = []
+        for param in data:
+            parameters.append(data[param])
+        return_val = handled_cursor.callfunc("rezervare_management.verificare_timp_ales", str, parameters)
         return return_val
 
 class PunctLucruSerializer(serializers.ModelSerializer):

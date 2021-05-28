@@ -8,7 +8,6 @@ urlpatterns = [
     path('client/login/', client.login),
     path('client/validare_cont_client/<str:token>/', client.validare_cont_client),
     path('client/generare_cod_inregistrare/<str:token>/', client.generare_cod_inregistrare),
-    path('client/inregistrare_rezervare/<str:token>/', client.inregistrare_rezervare),
     path('client/validare_rezervare/<str:token>', client.validare_rezervare),
     path('client/get_client_from_email/<str:token>/', client.get_client_from_email),
 
@@ -27,6 +26,9 @@ urlpatterns = [
 
     #REZERVARE
     path('rezervare/verificare_timp_ales/<str:token>/', punct_lucru.verificare_timp_ales),
+    path('rezervare/inregistrare_rezervare/<str:token>/', client.inregistrare_rezervare),
+    path('rezervare/get_detalii_rezervare/<str:token>/', client.get_detalii_rezervare),
+    path('rezervare/anulare_rezervare_client/<str:token>/', client.anulare_rezervare),
 
 
 

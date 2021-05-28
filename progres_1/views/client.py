@@ -2,7 +2,7 @@ from progres_1.models import client, punct_lucru, calendar_rezervare
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-
+import time
 
 @api_view(['POST'])
 def register_client(request):
@@ -58,12 +58,13 @@ def generare_cod_inregistrare(request, token):
 
 @api_view(['POST'])
 def inregistrare_rezervare(request, token):
+    time.sleep(5)
     if token is None or len(token) < 32 or client.Client.check_token(token) == 'N':
         return Response(data={"error": "Nu aveti autorizare pentru a viziona continutul"},
                         status=status.HTTP_400_BAD_REQUEST)
     try:
         calendar_rezervare.CalendarRezervare.inregistrare_rezervare(request.data)
-        data = {"success": "Cererea de rezervare a fost trimisa."}
+        data = {"success": "Cererea de rezervare a fost creata cu succes."}
         return Response(data=data, status=status.HTTP_200_OK)
     except Exception as e:
         error_msg = str(e).split(' ', 1)[1].split('\n', 1)[0]
@@ -95,6 +96,32 @@ def get_client_from_email(request, token):
     try:
         result = client.Client.get_client_from_email(request.data)
         return Response(result, status=status.HTTP_200_OK)
+    except Exception as e:
+        error_msg = str(e).split(' ', 1)[1].split('\n', 1)[0]
+        print(e)
+        data = {"error": error_msg}
+        return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def get_detalii_rezervare(request, token):
+    if token is None or len(token) < 32 or client.Client.check_token(token) == 'N':
+        return Response(data={"error": "Nu aveti autorizare pentru a viziona continutul"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    if request.method == 'POST':
+        detalii = calendar_rezervare.CalendarRezervare.get_detalii_rezervare(request.data)
+        return Response(detalii)
+
+@api_view(['POST'])
+def anulare_rezervare(request, token):
+    time.sleep(5)
+    if token is None or len(token) < 32 or client.Client.check_token(token) == 'N':
+        return Response(data={"error": "Nu aveti autorizare pentru a viziona continutul"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    try:
+        calendar_rezervare.CalendarRezervare.anulare_client(request.data)
+        data = {"success": "Rezervare anulata cu succes."}
+        return Response(data=data, status=status.HTTP_200_OK)
     except Exception as e:
         error_msg = str(e).split(' ', 1)[1].split('\n', 1)[0]
         print(e)

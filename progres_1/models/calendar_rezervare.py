@@ -91,3 +91,13 @@ class CalendarRezervare(models.Model):
         for param in data:
             parameters.append(data[param])
         handled_cursor.callproc("rezervare_management.marcare_neprezentat", parameters)
+
+    @staticmethod
+    def get_detalii_rezervare(data):
+        handled_cursor = HandledCursor()
+        parameters = []
+
+        for param in data:
+            parameters.append(data[param])
+        result = handled_cursor.callfunc("rezervare_management.get_detalii_rezervare", str, parameters)
+        return result

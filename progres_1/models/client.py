@@ -10,7 +10,6 @@ class Client(models.Model):
     nume = models.CharField(max_length=64, blank=True, null=True)
     prenume = models.CharField(max_length=64, blank=True, null=True)
     email = models.CharField(unique=True, max_length=64, blank=True, null=True)
-    username = models.CharField(unique=True, max_length=32, blank=True, null=True)
     telefon = models.CharField(max_length=64, blank=True, null=True)
     localitate = models.ForeignKey(localitate.Localitate, models.DO_NOTHING)
     rata_prezenta = models.IntegerField()
@@ -36,21 +35,12 @@ class Client(models.Model):
         body = "Buna, " + data["prenume"] + ".\nFoloseste acest cod la activarea contului tau: " + register_token + "\nAi grija, expira in 3 ore.\n\nGanduri bune,\nEchipa Progres"
         sender = "progres@progres_app.com"
         recipients = [data["email"]]
-        send_mail(subject, body, sender, recipients, fail_silently=False)
+        #send_mail(subject, body, sender, recipients, fail_silently=False)
 
         client_id = handled_cursor.callfunc("client_management.get_client_id", str, [data["email"]])
         handled_cursor.callproc("client_management.create_client_token", [client_id])
         auth_token = handled_cursor.callfunc("client_management.get_client_token", str, [client_id])
-        return {"id": client_id, "auth_token": auth_token}
-
-    @staticmethod
-    def add_recenzie(data):
-        handled_cursor = HandledCursor()
-        parameters = []
-
-        for param in data:
-            parameters.append(data[param])
-        handled_cursor.callproc("client_management.add_recenzie", parameters)
+        return {"auth_token": auth_token}
 
     @staticmethod
     def generare_cod_inregistrare(data):
@@ -68,7 +58,7 @@ class Client(models.Model):
         body = "Buna, " + client.prenume + ".\nLa cererea ta am generat un nou cod pentru activarea contului: " + register_token + "\nAi grija, expira in 3 ore.\n\nGanduri bune,\nEchipa Progres"
         sender = "progres@progres_app.com"
         recipients = [data["email"]]
-        send_mail(subject, body, sender, recipients, fail_silently=False)
+        #send_mail(subject, body, sender, recipients, fail_silently=False)
 
     @staticmethod
     def validare_cont_client(data):
@@ -80,28 +70,62 @@ class Client(models.Model):
         handled_cursor.callproc("client_management.validare_cont_client", parameters)
 
     @staticmethod
-    def get_cod_inregistrare(data):
-        handled_cursor = HandledCursor()
-        parameters = []
-
-        for param in data:
-            parameters.append(data[param])
-        return_val = handled_cursor.callfunc("client_management.get_cod_inregistrare", str, parameters)
-        return return_val
-
-    @staticmethod
     def login(data):
         handled_cursor = HandledCursor()
         parameters = []
 
         for param in data:
             parameters.append(data[param])
-        client_id = handled_cursor.callfunc("client_management.login", int, parameters)
+        handled_cursor.callproc("client_management.login", parameters)
 
-        parameters = [client_id]
-        handled_cursor.callproc("client_management.create_client_token", parameters)
-        client_token = handled_cursor.callfunc("client_management.get_client_token", str, parameters)
-        return client_token
+        login_token = handled_cursor.callfunc("client_management.get_cod_login", str, [data["email"]])
+        client = Client.objects.get(email=data["email"])
+        subject = "Login in contul PROGRES"
+        body = "Buna, " + client.prenume + ".\nFoloseste acest cod pentru accesarea contului tau: " + login_token + "\nAi grija, expira in 3 ore.\n\nGanduri bune,\nEchipa Progres"
+        sender = "progres@progres_app.com"
+        recipients = [data["email"]]
+        # send_mail(subject, body, sender, recipients, fail_silently=False)
+
+        client_id = handled_cursor.callfunc("client_management.get_client_id", str, [data["email"]])
+        handled_cursor.callproc("client_management.create_client_token", [client_id])
+        auth_token = handled_cursor.callfunc("client_management.get_client_token", str, [client_id])
+        return {"auth_token": auth_token}
+
+    @staticmethod
+    def generare_cod_login(data):
+        handled_cursor = HandledCursor()
+        parameters = []
+
+        for param in data:
+            parameters.append(data[param])
+        handled_cursor.callproc("client_management.generare_cod_login", parameters)
+
+        register_token = handled_cursor.callfunc("client_management.get_cod_login", str, [data["email"]])
+        client = Client.objects.get(email=data["email"])
+
+        subject = "Activare cont PROGRES"
+        body = "Buna, " + client.prenume + ".\nLa cererea ta am generat un nou cod pentru login: " + register_token + "\nAi grija, expira in 3 ore.\n\nGanduri bune,\nEchipa Progres"
+        sender = "progres@progres_app.com"
+        recipients = [data["email"]]
+        #send_mail(subject, body, sender, recipients, fail_silently=False)
+
+    @staticmethod
+    def validare_login(data):
+        handled_cursor = HandledCursor()
+        parameters = []
+
+        for param in data:
+            parameters.append(data[param])
+        handled_cursor.callproc("client_management.validare_login", parameters)
+
+    @staticmethod
+    def add_recenzie(data):
+        handled_cursor = HandledCursor()
+        parameters = []
+
+        for param in data:
+            parameters.append(data[param])
+        handled_cursor.callproc("client_management.add_recenzie", parameters)
 
     @staticmethod
     def create_client_token(data):
@@ -113,19 +137,9 @@ class Client(models.Model):
         handled_cursor.callproc("client_management.create_client_token", parameters)
 
     @staticmethod
-    def get_client_tokens(data):
+    def check_token(token, cont_valid, login_valid):
         handled_cursor = HandledCursor()
-        parameters = []
-
-        for param in data:
-            parameters.append(data[param])
-        tokens = handled_cursor.callfunc("client_management.get_client_tokens", str, parameters)
-        return tokens
-
-    @staticmethod
-    def check_token(token):
-        handled_cursor = HandledCursor()
-        parameters = [token]
+        parameters = [token, cont_valid, login_valid]
         result = handled_cursor.callfunc("client_management.check_token", str, parameters)
         return result
 
@@ -136,6 +150,15 @@ class Client(models.Model):
         for param in data:
             parameters.append(data[param])
         return_val = handled_cursor.callfunc("client_management.get_client_from_email", str, parameters)
+        return return_val
+
+    @staticmethod
+    def get_salt(data):
+        handled_cursor = HandledCursor()
+        parameters = []
+        for param in data:
+            parameters.append(data[param])
+        return_val = handled_cursor.callfunc("client_management.get_salt", str, parameters)
         return return_val
 
 

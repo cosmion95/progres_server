@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'progres_1',
+    'sslserver',
 ]
 
 MIDDLEWARE = [

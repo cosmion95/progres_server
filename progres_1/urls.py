@@ -5,24 +5,32 @@ urlpatterns = [
 
     #CLIENT
     path('client/register_client/', client.register_client),
-    path('client/login/', client.login),
     path('client/validare_cont_client/<str:token>/', client.validare_cont_client),
     path('client/generare_cod_inregistrare/<str:token>/', client.generare_cod_inregistrare),
+
+    path('client/login/', client.login),
+    path('client/validare_login/<str:token>/', client.validare_login),
+    path('client/generare_cod_login/<str:token>/', client.generare_cod_login),
+
     path('client/validare_rezervare/<str:token>', client.validare_rezervare),
     path('client/get_client_from_email/<str:token>/', client.get_client_from_email),
+    path('client/get_salt/', client.get_salt),
+
 
     #NOMENCLATOARE
     path('nomenclatoare/get_judete/', judet.get_judete),
     path('nomenclatoare/get_localitati/', localitate.get_localitati),
     path('nomenclatoare/get_domenii/<str:token>/', domeniu.get_domenii),
 
+
     #TERT
-    path('terti/get_puncte_lucru/<str:token>/', punct_lucru.get_puncte_lucru),
-    path('terti/get_program_punct/<str:token>/', punct_lucru.get_program_punct),
-    path('terti/get_urmatoarea_zi_lucratoare/<str:token>/', punct_lucru.get_urmatoarea_zi_lucratoare),
-    path('terti/get_procent_ocupare/<str:token>/', punct_lucru.get_procent_ocupare),
-    path('terti/get_program_neeligibil/<str:token>/', punct_lucru.get_program_neeligibil),
-    path('terti/get_tipuri_rezervare/<str:token>/', punct_lucru.get_tipuri_rezervare),
+    path('tert/get_puncte_lucru/<str:token>/', punct_lucru.get_puncte_lucru),
+    path('tert/get_program_punct/<str:token>/', punct_lucru.get_program_punct),
+    path('tert/get_urmatoarea_zi_lucratoare/<str:token>/', punct_lucru.get_urmatoarea_zi_lucratoare),
+    path('tert/get_procent_ocupare/<str:token>/', punct_lucru.get_procent_ocupare),
+    path('tert/get_program_neeligibil/<str:token>/', punct_lucru.get_program_neeligibil),
+    path('tert/get_tipuri_rezervare/<str:token>/', punct_lucru.get_tipuri_rezervare),
+
 
     #REZERVARE
     path('rezervare/verificare_timp_ales/<str:token>/', punct_lucru.verificare_timp_ales),

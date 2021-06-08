@@ -87,8 +87,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
         'NAME': 'localhost:1521/XEPDB1',
-        'USER': 'progres',
-        'PASSWORD': 'progres',
+        'USER': 'progres_server_user',
+        'PASSWORD': 'progres_server_user',
         'HOST': '',
         'PORT': '',
     }

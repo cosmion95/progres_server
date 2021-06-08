@@ -9,5 +9,5 @@ class Tert(models.Model):
     parola = models.CharField(max_length=64)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'terti'

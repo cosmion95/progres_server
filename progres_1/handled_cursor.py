@@ -13,14 +13,14 @@ class HandledCursor:
         self.cursor = connection.cursor()
 
     def callproc(self, proc_name, parameters):
-        self.cursor.callproc(proc_name, parameters)
+        self.cursor.callproc("progres." + proc_name, parameters)
 
     def callfunc(self, func_name, return_type, parameters):
-        function_return_value = self.cursor.callfunc(func_name, return_type, parameters)
+        function_return_value = self.cursor.callfunc("progres." + func_name, return_type, parameters)
         return function_return_value
 
     def clobFunction(self, func_name, parameters):
-        select = "select " + func_name + "("
+        select = "select progres." + func_name + "("
         paramValues = {}
         for i in range(len(parameters)):
             select = select + ":" + str(i) + ", "

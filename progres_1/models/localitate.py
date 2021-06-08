@@ -1,5 +1,4 @@
 from django.db import models
-from rest_framework import serializers
 
 from progres_1.handled_cursor import HandledCursor
 from progres_1.models import judet
@@ -14,7 +13,7 @@ class Localitate(models.Model):
     longitudine = models.DecimalField(max_digits=10, decimal_places=6)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'localitati'
         unique_together = (('judet', 'denumire'),)
 
@@ -26,9 +25,3 @@ class Localitate(models.Model):
             parameters.append(data[param])
         return_val = handled_cursor.clobFunction("nomenclatoare.get_localitati", parameters)
         return return_val
-
-
-class LocalitateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Localitate
-        fields = ['judet', 'denumire', 'cod_postal']

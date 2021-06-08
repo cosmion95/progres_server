@@ -18,7 +18,7 @@ def register_client(request):
 
 @api_view(['POST'])
 def generare_cod_inregistrare(request, token):
-    if token is None or len(token) < 32 or client.Client.check_token(token, 'N', 'N') == 'N':
+    if token is None or len(token) < 32 or client.Client.check_token(token, 'N', 'N', None) == 'N':
         return Response(data={"error": "Nu aveti autorizare pentru a accesa continutul"},
                         status=status.HTTP_400_BAD_REQUEST)
     try:
@@ -32,7 +32,7 @@ def generare_cod_inregistrare(request, token):
 
 @api_view(['POST'])
 def validare_cont_client(request, token):
-    if token is None or len(token) < 32 or client.Client.check_token(token, 'N', 'N') == 'N':
+    if token is None or len(token) < 32 or client.Client.check_token(token, 'N', 'N', None) == 'N':
         return Response(data={"error": "Nu aveti autorizare pentru a accesa continutul"},
                         status=status.HTTP_400_BAD_REQUEST)
     try:
@@ -58,7 +58,7 @@ def login(request):
 
 @api_view(['POST'])
 def generare_cod_login(request, token):
-    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'N') == 'N':
+    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'N', None) == 'N':
         return Response(data={"error": "Nu aveti autorizare pentru a accesa continutul"},
                         status=status.HTTP_400_BAD_REQUEST)
     try:
@@ -73,7 +73,7 @@ def generare_cod_login(request, token):
 
 @api_view(['POST'])
 def validare_login(request, token):
-    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'N') == 'N':
+    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'N', None) == 'N':
         return Response(data={"error": "Nu aveti autorizare pentru a accesa continutul"},
                         status=status.HTTP_400_BAD_REQUEST)
     try:
@@ -89,7 +89,7 @@ def validare_login(request, token):
 @api_view(['POST'])
 def inregistrare_rezervare(request, token):
     time.sleep(5)
-    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'D') == 'N':
+    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'D', request.data['client_id']) == 'N':
         return Response(data={"error": "Nu aveti autorizare pentru a accesa continutul"},
                         status=status.HTTP_400_BAD_REQUEST)
     try:
@@ -104,7 +104,7 @@ def inregistrare_rezervare(request, token):
 
 @api_view(['POST'])
 def validare_rezervare(request, token):
-    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'D') == 'N':
+    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'D', None) == 'N':
         return Response(data={"error": "Nu aveti autorizare pentru a accesa continutul"},
                         status=status.HTTP_400_BAD_REQUEST)
     try:
@@ -120,7 +120,7 @@ def validare_rezervare(request, token):
 
 @api_view(['POST'])
 def get_client_from_email(request, token):
-    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'D') == 'N':
+    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'D', None) == 'N':
         return Response(data={"error": "Nu aveti autorizare pentru a accesa continutul"},
                         status=status.HTTP_400_BAD_REQUEST)
     try:
@@ -135,7 +135,7 @@ def get_client_from_email(request, token):
 
 @api_view(['POST'])
 def get_detalii_rezervare(request, token):
-    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'D') == 'N':
+    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'D', None) == 'N':
         return Response(data={"error": "Nu aveti autorizare pentru a accesa continutul"},
                         status=status.HTTP_400_BAD_REQUEST)
     if request.method == 'POST':
@@ -151,7 +151,7 @@ def get_detalii_rezervare(request, token):
 @api_view(['POST'])
 def anulare_rezervare(request, token):
     time.sleep(5)
-    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'D') == 'N':
+    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'D', request.data['client_id']) == 'N':
         return Response(data={"error": "Nu aveti autorizare pentru a accesa continutul"},
                         status=status.HTTP_400_BAD_REQUEST)
     try:

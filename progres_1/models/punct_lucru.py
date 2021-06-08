@@ -1,7 +1,6 @@
 from django.db import models
 from progres_1.models import localitate, tert, domeniu
 from progres_1.handled_cursor import HandledCursor
-from rest_framework import serializers
 
 class PunctLucru(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -17,7 +16,7 @@ class PunctLucru(models.Model):
     minim_timp_estimat = models.IntegerField()
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'puncte_lucru'
 
     @staticmethod
@@ -91,8 +90,3 @@ class PunctLucru(models.Model):
             parameters.append(data[param])
         return_val = handled_cursor.callfunc("rezervare_management.verificare_timp_ales", str, parameters)
         return return_val
-
-class PunctLucruSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PunctLucru
-        fields = ['denumire', 'telefon', 'strada', 'nr_strada']

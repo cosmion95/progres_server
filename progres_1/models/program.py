@@ -11,7 +11,7 @@ class Program(models.Model):
     ora_final = models.DecimalField(max_digits=10, decimal_places=6)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'program'
         unique_together = (('punct_lucru', 'zi_program_nr', 'ora_start'),)
 

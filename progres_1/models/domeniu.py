@@ -6,7 +6,7 @@ class Domeniu(models.Model):
     denumire = models.CharField(max_length=128)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'domenii'
 
     @staticmethod

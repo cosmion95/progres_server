@@ -11,7 +11,7 @@ class ExceptieProgram(models.Model):
     ora_final = models.DecimalField(max_digits=10, decimal_places=6)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'exceptii_program'
 
     @staticmethod

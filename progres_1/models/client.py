@@ -1,7 +1,6 @@
 from django.db import models
 from progres_1.handled_cursor import HandledCursor
 from django.core.mail import send_mail
-from rest_framework import serializers
 from progres_1.models import localitate
 
 
@@ -17,7 +16,7 @@ class Client(models.Model):
     cont_valid = models.CharField(max_length=1, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'clienti'
 
     @staticmethod
@@ -52,10 +51,10 @@ class Client(models.Model):
         handled_cursor.callproc("client_management.generare_cod_inregistrare", parameters)
 
         register_token = handled_cursor.callfunc("client_management.get_cod_inregistrare", str, [data["email"]])
-        client = Client.objects.get(email=data["email"])
+        prenume_client = handled_cursor.callfunc("client_management.get_prenume", str, [data["email"]])
 
         subject = "Activare cont PROGRES"
-        body = "Buna, " + client.prenume + ".\nLa cererea ta am generat un nou cod pentru activarea contului: " + register_token + "\nAi grija, expira in 3 ore.\n\nGanduri bune,\nEchipa Progres"
+        body = "Buna, " + prenume_client + ".\nLa cererea ta am generat un nou cod pentru activarea contului: " + register_token + "\nAi grija, expira in 3 ore.\n\nGanduri bune,\nEchipa Progres"
         sender = "progres@progres_app.com"
         recipients = [data["email"]]
         #send_mail(subject, body, sender, recipients, fail_silently=False)
@@ -79,9 +78,9 @@ class Client(models.Model):
         handled_cursor.callproc("client_management.login", parameters)
 
         login_token = handled_cursor.callfunc("client_management.get_cod_login", str, [data["email"]])
-        client = Client.objects.get(email=data["email"])
+        prenume_client = handled_cursor.callfunc("client_management.get_prenume", str, [data["email"]])
         subject = "Login in contul PROGRES"
-        body = "Buna, " + client.prenume + ".\nFoloseste acest cod pentru accesarea contului tau: " + login_token + "\nAi grija, expira in 3 ore.\n\nGanduri bune,\nEchipa Progres"
+        body = "Buna, " + prenume_client + ".\nFoloseste acest cod pentru accesarea contului tau: " + login_token + "\nAi grija, expira in 3 ore.\n\nGanduri bune,\nEchipa Progres"
         sender = "progres@progres_app.com"
         recipients = [data["email"]]
         # send_mail(subject, body, sender, recipients, fail_silently=False)
@@ -101,10 +100,10 @@ class Client(models.Model):
         handled_cursor.callproc("client_management.generare_cod_login", parameters)
 
         register_token = handled_cursor.callfunc("client_management.get_cod_login", str, [data["email"]])
-        client = Client.objects.get(email=data["email"])
+        prenume_client = handled_cursor.callfunc("client_management.get_prenume", str, [data["email"]])
 
         subject = "Activare cont PROGRES"
-        body = "Buna, " + client.prenume + ".\nLa cererea ta am generat un nou cod pentru login: " + register_token + "\nAi grija, expira in 3 ore.\n\nGanduri bune,\nEchipa Progres"
+        body = "Buna, " + prenume_client + ".\nLa cererea ta am generat un nou cod pentru login: " + register_token + "\nAi grija, expira in 3 ore.\n\nGanduri bune,\nEchipa Progres"
         sender = "progres@progres_app.com"
         recipients = [data["email"]]
         #send_mail(subject, body, sender, recipients, fail_silently=False)
@@ -137,9 +136,9 @@ class Client(models.Model):
         handled_cursor.callproc("client_management.create_client_token", parameters)
 
     @staticmethod
-    def check_token(token, cont_valid, login_valid):
+    def check_token(token, cont_valid, login_valid, client_id):
         handled_cursor = HandledCursor()
-        parameters = [token, cont_valid, login_valid]
+        parameters = [token, cont_valid, login_valid, client_id]
         result = handled_cursor.callfunc("client_management.check_token", str, parameters)
         return result
 
@@ -160,9 +159,3 @@ class Client(models.Model):
             parameters.append(data[param])
         return_val = handled_cursor.callfunc("client_management.get_salt", str, parameters)
         return return_val
-
-
-class ClientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Client
-        fields = ['nume', 'prenume', 'email', 'localitate']

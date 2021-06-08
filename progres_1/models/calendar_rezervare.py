@@ -25,7 +25,7 @@ class CalendarRezervare(models.Model):
     anulata_la = models.DateField(blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'calendar_rezervari'
 
     @staticmethod

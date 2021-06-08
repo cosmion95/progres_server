@@ -14,7 +14,7 @@ class Angajat(models.Model):
     functie = models.CharField(max_length=64)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'angajati'
 
     @staticmethod

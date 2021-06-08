@@ -7,5 +7,5 @@ class ZiProgram(models.Model):
     ordine = models.IntegerField()
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'zile_program'

@@ -6,7 +6,7 @@ from rest_framework import status
 
 @api_view(['GET'])
 def get_domenii(request, token):
-    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'D') == 'N':
+    if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'D', None) == 'N':
         return Response(data={"error": "Nu aveti autorizare pentru a viziona continutul"},
                         status=status.HTTP_400_BAD_REQUEST)
     if request.method == 'GET':

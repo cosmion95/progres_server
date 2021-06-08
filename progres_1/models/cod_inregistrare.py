@@ -11,5 +11,5 @@ class CodInregistrare(models.Model):
     incercat_validare_la = models.DateField(blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'coduri_inregistrare'

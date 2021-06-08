@@ -10,5 +10,5 @@ class Mesagerie(models.Model):
     citit_client = models.CharField(max_length=1)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mesagerie'

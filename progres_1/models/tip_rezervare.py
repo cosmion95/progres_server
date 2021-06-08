@@ -12,7 +12,7 @@ class TipRezervare(models.Model):
     creat_la = models.DateField()
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'tipuri_rezervare'
 
     @staticmethod

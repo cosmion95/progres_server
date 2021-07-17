@@ -79,7 +79,7 @@ class PunctLucru(models.Model):
         parameters = []
         for param in data:
             parameters.append(data[param])
-        return_val = handled_cursor.callfunc("tert_management.get_program_neeligibil", str, parameters)
+        return_val = handled_cursor.clobFunction("tert_management.get_program_neeligibil", parameters)
         return return_val
 
     @staticmethod

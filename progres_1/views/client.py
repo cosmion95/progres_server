@@ -88,7 +88,7 @@ def validare_login(request, token):
 
 @api_view(['POST'])
 def inregistrare_rezervare(request, token):
-    time.sleep(5)
+    time.sleep(1)
     if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'D', request.data['client_id']) == 'N':
         return Response(data={"error": "Nu aveti autorizare pentru a accesa continutul"},
                         status=status.HTTP_400_BAD_REQUEST)
@@ -150,7 +150,7 @@ def get_detalii_rezervare(request, token):
 
 @api_view(['POST'])
 def anulare_rezervare(request, token):
-    time.sleep(5)
+    time.sleep(1)
     if token is None or len(token) < 32 or client.Client.check_token(token, 'D', 'D', request.data['client_id']) == 'N':
         return Response(data={"error": "Nu aveti autorizare pentru a accesa continutul"},
                         status=status.HTTP_400_BAD_REQUEST)
